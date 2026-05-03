@@ -1,3 +1,7 @@
-##
+## MVC Pattern Challenge
 
-This is the starter repository for the backend-mvc-pattern challenge.
+### Scripts
+
+- `npm run dev` — run with `nodemon` and auto-restart on watched file changes.
+- `npm run start` — run app directly with `tsx`.
+- `npm run typecheck` — run TypeScript checks (`tsc --noEmit`).

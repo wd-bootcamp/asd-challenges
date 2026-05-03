@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/app.ts",
+    "dev": "nodemon",
     "start": "tsx src/app.ts",
+    "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,7 +19,9 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/node": "^24.10.1",
     "@types/nunjucks": "^3.2.6",
+    "nodemon": "^3.1.10",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   }

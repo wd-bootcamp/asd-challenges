@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { type Request, type Response } from "express";
 import nunjucks from "nunjucks";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
