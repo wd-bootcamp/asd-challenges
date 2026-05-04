@@ -22,8 +22,6 @@ const assetsDir = path.join(projectRoot, "src", "assets");
 const cssDir = path.join(projectRoot, "src", "css");
 
 nunjucks.configure(projectRoot, { autoescape: true, express: app });
-app.set("view engine", "html");
-app.set("views", projectRoot);
 app.use("/assets", express.static(assetsDir));
 app.use("/css", express.static(cssDir));
 const seedPosts: Post[] = [
@@ -114,7 +112,7 @@ app.get("/", (req: Request, res: Response) => {
     createdAt: formatDate(post.createdAt),
   }));
 
-  res.render("index", {
+  res.render("index.html", {
     posts: view,
     controls: {
       author: authorFilter,
@@ -143,21 +141,21 @@ app.get("/posts/:slug", (req: Request, res: Response) => {
     res.status(404).send("Post not found");
     return;
   }
-  res.render("post", {
+  res.render("post.html", {
     post: { ...post, createdAt: formatDate(post.createdAt) },
   });
 });
 
 app.get("/contact", (req: Request, res: Response) => {
-  res.render("contact");
+  res.render("contact.html");
 });
 
 app.get("/about", (req: Request, res: Response) => {
-  res.render("about");
+  res.render("about.html");
 });
 
 app.get("/example-post", (req: Request, res: Response) => {
-  res.render("postExample");
+  res.render("postExample.html");
 });
 
 const port = Number(process.env.PORT) || 3000;
