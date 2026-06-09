@@ -1,35 +1,35 @@
 import {
-  BadRequestException,
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   UseGuards,
   Request,
   ParseIntPipe,
 } from "@nestjs/common";
 import { CommentsService } from "./comments.service";
-import type { CommentResponseDto } from "./CommentResponseDto";
+import type { CommentResponse } from "./dto/CommentResponseDto";
 import { AuthGuard } from "@nestjs/passport";
 import type { RequestWith } from "../auth/RequestWith";
-import type { ValidatedUser } from "../users/users.interface";
+import type { ValidatedUser } from "../users/entity/user.entity";
 
 @Controller("comments")
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Get(":id")
-  getById(@Param("id", ParseIntPipe) id: number): CommentResponseDto {
+  async getById(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<CommentResponse> {
     return this.commentsService.getById(id);
   }
 
   @UseGuards(AuthGuard("jwt"))
   @Delete(":id")
-  delete(
+  async delete(
     @Param("id", ParseIntPipe) id: number,
     @Request() request: RequestWith<ValidatedUser>,
-  ): boolean {
+  ): Promise<boolean> {
     return this.commentsService.softDelete(id, request.user);
   }
 }

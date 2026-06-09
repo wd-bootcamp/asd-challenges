@@ -4,46 +4,51 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { ThreadsRepository } from "./threads.repository";
-import type {
-  CreateThreadPayload,
-  PatchThreadPayload,
-  Thread,
-  ThreadWithComments,
-} from "./Thread.interface";
 import { CommentsService } from "../comments/comments.service";
-import type { ValidatedUser } from "../users/users.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Thread, type CreateThreadPayload } from "./entity/thread.entity";
+import type { Repository, UpdateResult } from "typeorm";
+import { plainToInstance } from "class-transformer";
+import { ThreadWithCommentsResponseDto } from "./dto/ThreadWithCommentsResponseDto";
+import { ThreadResponseDto } from "./dto/ThreadResponseDto";
+import type { ValidatedUser } from "../users/entity/user.entity";
 
 @Injectable()
 export class ThreadsService {
   constructor(
-    private readonly threadsRepository: ThreadsRepository,
+    @InjectRepository(Thread)
+    private readonly threadsRepository: Repository<Thread>,
     private readonly commentsService: CommentsService,
   ) {}
 
-  getAll(): Thread[] {
-    return this.threadsRepository.findAll();
+  async getAll(): Promise<ThreadResponseDto[]> {
+    const threads = await this.threadsRepository.find();
+    const instance = plainToInstance(ThreadResponseDto, threads);
+    return instance;
   }
 
-  getById(id: number): ThreadWithComments {
-    const thread = this.threadsRepository.findById(id);
+  async getById(id: number): Promise<ThreadWithCommentsResponseDto> {
+    const thread = await this.threadsRepository.findOneBy({ id });
 
     if (!thread) throw new NotFoundException("Thread not found");
 
-    const comments = this.commentsService.getByThreadId(id);
+    const comments = await this.commentsService.getByThreadId(id);
 
-    return {
+    return plainToInstance(ThreadWithCommentsResponseDto, {
       ...thread,
       comments,
-    };
+    });
   }
 
-  create(thread: CreateThreadPayload): Thread {
-    return this.threadsRepository.create(thread);
+  async create(thread: CreateThreadPayload): Promise<Thread> {
+    return plainToInstance(
+      ThreadWithCommentsResponseDto,
+      await this.threadsRepository.save(thread),
+    );
   }
 
-  delete(id: number, user: ValidatedUser): boolean {
-    const thread = this.threadsRepository.findById(id);
+  async delete(id: number, user: ValidatedUser): Promise<boolean> {
+    const thread = await this.threadsRepository.findOneBy({ id });
 
     if (!thread) {
       throw new NotFoundException("Thread not found");
@@ -58,7 +63,7 @@ export class ThreadsService {
       );
     }
 
-    const deletionSuccess = this.threadsRepository.delete(id);
+    const deletionSuccess = await this.threadsRepository.delete(id);
 
     if (!deletionSuccess) {
       throw new InternalServerErrorException("Thread could not be deleted");
@@ -69,8 +74,8 @@ export class ThreadsService {
     return true;
   }
 
-  update(id: number, thread: PatchThreadPayload): Thread {
-    const updatedThread = this.threadsRepository.update(id, thread);
+  async update(id: number, thread: Partial<Thread>): Promise<UpdateResult> {
+    const updatedThread = await this.threadsRepository.update({ id }, thread);
 
     if (!updatedThread) {
       throw new NotFoundException("Thread not found");

@@ -3,45 +3,48 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { CommentsRepository } from "./comments.repository";
-import type { Comment, CreateCommentPayload } from "./Comment.interface";
 import { plainToInstance } from "class-transformer";
-import { CommentResponseDto } from "./CommentResponseDto";
-import type { CreateCommentDto } from "./CreateCommentDto";
-import type { ValidatedUser } from "../users/users.interface";
+import { CommentResponse } from "./dto/CommentResponseDto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Comment, type CreateCommentPayload } from "./entity/comment.entity";
+import type { Repository } from "typeorm";
+import type { ValidatedUser } from "../users/entity/user.entity";
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly commentsRepository: CommentsRepository) {}
+  constructor(
+    @InjectRepository(Comment)
+    private readonly commentsRepository: Repository<Comment>,
+  ) {}
 
-  getById(id: number): CommentResponseDto {
-    const comment = this.commentsRepository.findById(id);
+  async getById(id: number): Promise<CommentResponse> {
+    const comment = await this.commentsRepository.findOneBy({ id });
 
     if (!comment) {
       throw new NotFoundException("Comment not found");
     }
 
-    return plainToInstance(CommentResponseDto, comment, {
+    return plainToInstance(CommentResponse, comment, {
       excludeExtraneousValues: true,
     });
   }
 
-  getByThreadId(threadId: number): CommentResponseDto[] {
-    const comments = this.commentsRepository.findByThreadId(threadId);
-    return plainToInstance(CommentResponseDto, comments, {
+  async getByThreadId(threadId: number): Promise<CommentResponse[]> {
+    const comments = await this.commentsRepository.findBy({ threadId });
+    return plainToInstance(CommentResponse, comments, {
       excludeExtraneousValues: true,
     });
   }
 
-  create(comment: CreateCommentPayload): CommentResponseDto {
-    const newComment = this.commentsRepository.create(comment);
-    return plainToInstance(CommentResponseDto, newComment, {
+  async create(comment: CreateCommentPayload): Promise<CommentResponse> {
+    const newComment = this.commentsRepository.save(comment);
+    return plainToInstance(CommentResponse, newComment, {
       excludeExtraneousValues: true,
     });
   }
 
-  softDelete(id: number, user: ValidatedUser): boolean {
-    const comment = this.commentsRepository.findById(id);
+  async softDelete(id: number, user: ValidatedUser): Promise<boolean> {
+    const comment = await this.commentsRepository.findOneBy({ id });
 
     if (!comment) {
       throw new NotFoundException("Comment not found");
@@ -56,15 +59,13 @@ export class CommentsService {
       );
     }
 
-    this.commentsRepository.update(id, { body: "[deleted]" });
+    this.commentsRepository.update({ id }, { body: "[deleted]" });
     return true;
   }
 
-  deleteByThreadId(threadId: number): boolean {
-    const comments = this.commentsRepository.findByThreadId(threadId);
+  async deleteByThreadId(threadId: number): Promise<boolean> {
+    const result = await this.commentsRepository.delete({ threadId });
 
-    return comments.every((comment) =>
-      this.commentsRepository.delete(comment.id),
-    );
+    return !!result.affected && result.affected > 0;
   }
 }
