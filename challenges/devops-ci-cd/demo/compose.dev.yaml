@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /node_modules
+  db:
+    volumes:
+      - cyberchat-data-dev:/var/lib/postgresql/data
+
+volumes:
+  cyberchat-data-dev:

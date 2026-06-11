@@ -1,0 +1,22 @@
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    env_file: .env
+    depends_on:
+      - db
+  db:
+    image: postgres:18
+    ports:
+      - '${DATABASE_PORT}:${DATABASE_PORT}'
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PORT: ${DATABASE_PORT}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - cyberchat-data:/var/lib/postgresql/data
+
+volumes:
+  cyberchat-data:
