@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "nunjucks": "^3.2.4",
+    "prettier": "^3.8.3",
+    "prettier-plugin-jinja-template": "^2.1.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/nunjucks": "^3.2.6",
+    "nodemon": "^3.1.14"
+  }
+}
