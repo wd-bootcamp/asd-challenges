@@ -1,3 +1,5 @@
-# IT-Book Library
+# Book Library
 
-This is the template repository for the recap project 1. It contains the source code for the IT-Book Library application. Take a look into the `./src` directory. You will find the basic HTML for your application as well as CSS for some styling.
+Starter files for recap project 1. The three HTML pages and the stylesheet are ready: `index.html` lists the books, `detail.html` shows a single book, and `favorite.html` shows the favorites. The sample rows and the sample book show what the pages look like with data. Your TypeScript replaces them with data from `bookmonkey-api`.
+
+Put your TypeScript files into a `src` folder and compile them into `dist`.

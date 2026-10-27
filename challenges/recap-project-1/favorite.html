@@ -22,19 +22,19 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
     />
     <link rel="stylesheet" href="style.css" />
-    <!-- You should properly set the path from the main file. -->
-    <title>Document</title>
+    <!-- Add the <script type="module"> for this page here. -->
+    <title>Favorites | Book Library</title>
   </head>
   <body>
     <header class="header">
       <div class="container">
         <div class="row">
-          <div class="column"><p class="logo">IT.Book.Library</p></div>
+          <div class="column"><p class="logo">Book.Library</p></div>
           <div class="column">
             <nav class="mainnav">
               <a href="index.html" class="mainnav-link">Books</a>
               <a
-                href="favourites.html"
+                href="favorite.html"
                 class="mainnav-link mainnav-link--active"
                 >Favorites <span class="mainnav-number">2</span></a
               >
@@ -55,8 +55,8 @@
           <label for="by-publisher">Filter by Publisher</label>
           <select id="by-publisher">
             <option value="-">-</option>
-            <option value="leanpub">Leanpub</option>
-            <option value="leanpub">McGraw-Hill</option>
+            <option value="Bloomsbury">Bloomsbury</option>
+            <option value="Ace Books">Ace Books</option>
           </select>
         </form>
       </section>
@@ -91,12 +91,12 @@
                     </svg>
                   </button>
                 </td>
-                <td>Java Web Scraping Handbook</td>
-                <td>1001606140805</td>
-                <td>Kevin Sahin</td>
-                <td>Leanpub</td>
+                <td>Harry Potter and the Philosopher’s Stone</td>
+                <td>9780747532699</td>
+                <td>J. K. Rowling</td>
+                <td>Bloomsbury</td>
                 <td>
-                  <a href="/detail?isbn=1001606140805" class="button">
+                  <a href="detail.html?isbn=9780747532699" class="button">
                     Detail
                   </a>
                 </td>
@@ -118,12 +118,12 @@
                     </svg>
                   </button>
                 </td>
-                <td>Java Web Scraping Handbook</td>
-                <td>1001606140805</td>
-                <td>Kevin Sahin</td>
-                <td>Leanpub</td>
+                <td>Dune</td>
+                <td>9780441172719</td>
+                <td>Frank Herbert</td>
+                <td>Ace Books</td>
                 <td>
-                  <a href="/detail?isbn=1001606140805" class="button">
+                  <a href="detail.html?isbn=9780441172719" class="button">
                     Detail
                   </a>
                 </td>
