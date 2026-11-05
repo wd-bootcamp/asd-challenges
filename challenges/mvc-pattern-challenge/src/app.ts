@@ -146,15 +146,15 @@ app.get("/posts/:slug", (req: Request, res: Response) => {
   });
 });
 
-app.get("/contact", (req: Request, res: Response) => {
+app.get("/contact", (_req: Request, res: Response) => {
   res.render("contact.html");
 });
 
-app.get("/about", (req: Request, res: Response) => {
+app.get("/about", (_req: Request, res: Response) => {
   res.render("about.html");
 });
 
-app.get("/example-post", (req: Request, res: Response) => {
+app.get("/example-post", (_req: Request, res: Response) => {
   res.render("postExample.html");
 });
 
